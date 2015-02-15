@@ -34,7 +34,7 @@ The first thing you should do is:
 	538  ios 7.0             iphone        iPhone 5S
 	539  ios 7.0             iphone        iPhone 5C
 	
-The `list` command basically fetches all browsers available on BrowserStack and caches them locally on `.browsers.json`. You can choose to add this file on yout `.gitignore`.
+The `list` command basically fetches all browsers available on BrowserStack and caches them locally on `.screenshots/.browsers.json`. You can choose to add this folder on your `.gitignore`, since shoot will save all images there as well.
 
 Then, you can choose to activate the browsers you wanna use, based on id. Example:
 
