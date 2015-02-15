@@ -53,6 +53,8 @@ class Shoot::Scenario
   def shoot(method)
     send(method)
     sleep(1) # Just in case
-    save_screenshot("shoot/screenshots/#{method} #{platform_name}.png")
+    require 'fileutils'
+    FileUtils::mkdir_p '.screenshots'
+    save_screenshot(".screenshots/#{method} #{platform_name}.png")
   end
 end

@@ -4,7 +4,9 @@ require 'colorize'
 
 module Shoot
   class CLI < Thor
-    BROWSERS_PATH = '.browsers.json'
+    require 'fileutils'
+    FileUtils::mkdir_p '.screenshots'
+    BROWSERS_PATH = '.screenshots/.browsers.json'
 
     desc 'list', 'List all platforms. Optionally pass a filter (e.g. browserstack list ie)'
     def list(filter = nil)
