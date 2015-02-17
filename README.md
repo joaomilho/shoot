@@ -16,6 +16,8 @@ And then execute:
 
     $ bundle
 
+Also add the following environment variables: `BROWSERSTACK_USER` and `BROWSERSTACK_KEY`. The way you do it is up to you (we recommend either dotenv or an export in your personal files).
+
 ## Usage
 
 Shoot installs a binary. To inspect it, just run:
