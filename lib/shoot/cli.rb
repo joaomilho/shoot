@@ -81,7 +81,7 @@ module Shoot
 
       def fetch_json_and_prepare
         require 'rest_client'
-        JSON.parse(RestClient.get("https://juanlulkin1:NDswkopCqKPmA9wWAQws@www.browserstack.com/automate/browsers.json")).tap do |json|
+        JSON.parse(RestClient.get("https://#{ENV['BROWSERSTACK_USER']}:#{ENV['BROWSERSTACK_KEY']}@www.browserstack.com/automate/browsers.json")).tap do |json|
           json.each_with_index do |browser, index|
             browser['id'] = index
           end
