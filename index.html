@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Shoot by joaomilho</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Shoot</h1>
+        <p>A helper to take shots on BrowserStack</p>
+
+        <p class="view"><a href="https://github.com/joaomilho/shoot">View the Project on GitHub <small>joaomilho/shoot</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/joaomilho/shoot/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/joaomilho/shoot/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/joaomilho/shoot">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="shoot" class="anchor" href="#shoot" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shoot</h1>
+
+<p>Shoot is a helper library to take screenshots using BrowserStack. If you don't need a full integration test coupled with screenshots, it's a simpler choice.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add this line to your application's Gemfile:</p>
+
+<div class="highlight highlight-ruby"><pre>group <span class="pl-c1">:test</span> <span class="pl-k">do</span>
+  <span class="pl-k">gem</span> <span class="pl-s1"><span class="pl-pds">'</span>shoot<span class="pl-pds">'</span></span>
+<span class="pl-k">end</span></pre></div>
+
+<p>And then execute:</p>
+
+<pre><code>$ bundle
+</code></pre>
+
+<p>Also add the following environment variables: <code>BROWSERSTACK_USER</code> and <code>BROWSERSTACK_KEY</code>. The way you do it is up to you (we recommend either dotenv or an export in your personal files).</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Shoot installs a binary. To inspect it, just run:</p>
+
+<pre><code>$ shoot
+</code></pre>
+
+<p>The first thing you should do is:</p>
+
+<pre><code>$ shoot list
+ID   OS #                Browser #     Device
+0    OS X Snow Leopard   safari 5.1
+1    OS X Snow Leopard   chrome 14.0
+2    OS X Snow Leopard   chrome 16.0
+...
+537  ios 7.0             ipad          iPad mini Retina
+538  ios 7.0             iphone        iPhone 5S
+539  ios 7.0             iphone        iPhone 5C
+</code></pre>
+
+<p>The <code>list</code> command basically fetches all browsers available on BrowserStack and caches them locally on <code>.screenshots/.browsers.json</code>. You can choose to add this folder on your <code>.gitignore</code>, since shoot will save all images there as well.</p>
+
+<p>Then, you can choose to activate the browsers you wanna use, based on id. Example:</p>
+
+<pre><code>$ shoot activate 2
+</code></pre>
+
+<p>This will activate (given your output is the same as above) chrome 16 on OS X Snow Leopard.</p>
+
+<p>Now, create a scenario. Here's an example:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-k">class</span> <span class="pl-en">MyScenario<span class="pl-e"> &lt; Shoot::Scenario</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">login</span>
+        visit <span class="pl-s1"><span class="pl-pds">"</span>http://url.to.login<span class="pl-pds">"</span></span>
+    <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>As you can see, it follows <a href="https://github.com/jnicklas/capybara">capybara's</a> syntax, so you can visit pages, fill forms, click links and so on...</p>
+
+<p>Now run:</p>
+
+<pre><code>$ shoot scenario my_scenario.rb
+</code></pre>
+
+<p>This will run all the methods of MyScenario and generate screenshots for all active browsers.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it ( <a href="https://github.com/joaomilho/shoot/fork">https://github.com/joaomilho/shoot/fork</a> )</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/joaomilho">joaomilho</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
