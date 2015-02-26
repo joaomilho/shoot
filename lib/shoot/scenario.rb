@@ -23,6 +23,16 @@ class Shoot::Scenario
     Capybara.current_driver = platform_name
   end
 
+  def shoot(method)
+    send(method)
+    Kernel.sleep(1) # Just in case
+    require 'fileutils'
+    FileUtils::mkdir_p '.screenshots'
+    save_screenshot(".screenshots/#{method} #{platform_name}.png")
+  end
+
+  private
+
   def platform_name
     @platform_name ||= if @platform['device']
                          @platform['device']
@@ -50,11 +60,4 @@ class Shoot::Scenario
     @capabilities[:device] = @platform['device'] if @platform['device']
   end
 
-  def shoot(method)
-    send(method)
-    sleep(1) # Just in case
-    require 'fileutils'
-    FileUtils::mkdir_p '.screenshots'
-    save_screenshot(".screenshots/#{method} #{platform_name}.png")
-  end
 end
