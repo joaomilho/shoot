@@ -20,7 +20,7 @@ module Shoot
 
     desc 'scenario', 'Runs the given scenario on all active platforms or one platform, based on ID'
     def scenario(file, id = nil, test = 'all')
-      require Dir.pwd + '/' + file
+      require_file(file)
       klass_name = File.basename(file, '.rb').split('_').map(&:capitalize).join
       klass = Kernel.const_get(klass_name)
 
@@ -50,6 +50,10 @@ module Shoot
     end
 
     no_commands do
+      def require_file(file)
+        require Dir.pwd + '/' + file
+      end
+
       def table(browsers)
         table = browsers.map do |p|
           to_row(p)
