@@ -1,3 +1,6 @@
+![](https://img.shields.io/gem/v/shoot.svg)
+![](https://img.shields.io/codeclimate/github/joaomilho/shoot.svg)
+
 # Shoot
 
 Shoot is a helper library to take screenshots using BrowserStack. If you don't need a full integration test coupled with screenshots, it's a simpler choice.
