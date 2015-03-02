@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 2"
 
-  spec.add_dependency "selenium-webdriver", "~> 2.44"
-  spec.add_dependency "capybara", "~> 2.4"
+  spec.add_dependency "selenium-webdriver", "~> 2"
+  spec.add_dependency "capybara", "~> 2"
   spec.add_dependency "thor", "~> 0.19"
   spec.add_dependency "colorize", "~> 0.7"
-  spec.add_dependency "rest_client", "~> 1.7"
+  spec.add_dependency "rest-client", "~> 1.7"
 end
