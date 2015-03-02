@@ -8,7 +8,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 group :test do
-	gem 'shoot'
+  gem 'shoot'
 end
 ```
 
