@@ -31,6 +31,11 @@ class Shoot::Scenario
     save_screenshot(".screenshots/#{method} #{platform_name}.png")
   end
 
+  def ok
+    puts 'OK'
+    page.driver.quit
+  end
+
   private
 
   def platform_name
@@ -40,11 +45,6 @@ class Shoot::Scenario
                          name_items = %w(browser browser_version os os_version)
                          @platform.values_at(*name_items).join(' ')
                        end
-  end
-
-  def ok
-    puts 'OK'
-    page.driver.quit
   end
 
   def config_capabilities # rubocop:disable AbcSize
