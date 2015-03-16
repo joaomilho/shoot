@@ -62,6 +62,8 @@ Now run:
 	
 This will run all the methods of MyScenario and generate screenshots for all active browsers.
 
+The resulting images will be saved on <font size="7">	`.screenshots`</font> folder.
+
 
 ## Contributing
 
