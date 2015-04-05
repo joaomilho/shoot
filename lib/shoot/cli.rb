@@ -49,6 +49,14 @@ module Shoot
       table json[id.to_i - 2, 5]
     end
 
+    desc 'deactivate_all', 'Deactivate all the platforms'
+    def deactivate_all
+      json.select { |p| p['active'] }.each do |child|
+        child['active'] = false
+      end
+      save_json
+    end
+
     no_commands do
       def require_file(file)
         require Dir.pwd + '/' + file
@@ -63,10 +71,10 @@ module Shoot
 
       def to_row(p)
         [
-          p['id'].to_s.colorize(p['active'] ? :green : :red),
-          "#{p['os']} #{p['os_version']}",
-          "#{p['browser']} #{p['browser_version']}",
-          p['device']
+            p['id'].to_s.colorize(p['active'] ? :green : :red),
+            "#{p['os']} #{p['os_version']}",
+            "#{p['browser']} #{p['browser_version']}",
+            p['device']
         ]
       end
 
