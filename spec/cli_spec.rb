@@ -18,7 +18,6 @@ describe 'Shoot::CLI' do
 
   describe 'list' do
     before do
-      allow(cli).to receive(:json).and_return(mock_json)
       allow(cli).to receive(:table) {|arg| arg }
     end
 
@@ -66,6 +65,18 @@ describe 'Shoot::CLI' do
 
     it 'deactivates the browser' do
       expect{ cli.deactivate(1) }.to change{ mock_json[1]['active'] }.from(true).to(false)
+      expect(cli).to have_received(:save_json)
+    end
+  end
+
+  describe 'deactivate_all' do
+    before do
+      allow(cli).to receive(:table) {|arg| arg }
+      allow(cli).to receive(:save_json)
+    end
+
+    it 'deactivates the browser' do
+      expect{ cli.deactivate_all }.to change{ mock_json[1]['active'] }.from(true).to(false)
       expect(cli).to have_received(:save_json)
     end
   end
