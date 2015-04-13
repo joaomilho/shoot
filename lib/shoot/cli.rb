@@ -49,6 +49,14 @@ module Shoot
       table json[id.to_i - 2, 5]
     end
 
+    desc 'deactivate_all', 'Deactivate all the platforms'
+    def deactivate_all
+      _active.each do |child|
+        child['active'] = false
+      end
+      save_json
+    end
+
     no_commands do
       def require_file(file)
         require Dir.pwd + '/' + file
