@@ -80,7 +80,7 @@ module Shoot
       end
 
       def save_json
-        File.write(BROWSERS_PATH, JSON.dump(json))
+        File.write(BROWSERS_PATH, JSON.pretty_generate(json))
       end
 
       def fetch_json_and_prepare
