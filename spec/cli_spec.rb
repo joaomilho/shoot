@@ -83,6 +83,45 @@ describe 'Shoot::CLI' do
 
   describe 'scenario' do
     before do
+      allow(cli).to receive(:_active).and_return(["foo"])
+      allow(cli).to receive(:run)
+    end
+
+    it 'runs scenario' do
+      cli.scenario('foo.rb')
+      expect(cli).to have_received(:run)
+    end
+  end
+
+  describe 'test' do
+    describe 'file' do
+      before do
+        allow(cli).to receive(:run)
+      end
+
+      it 'runs scenario' do
+        cli.test('foo.rb')
+        expect(cli).to have_received(:run).with("foo.rb")
+      end
+    end
+
+    describe 'directory' do
+      before do
+        allow(File).to receive(:directory?).with('foo').and_return(true)
+        allow(Dir).to receive(:glob).with('foo/*.rb').and_return(["foo/bar.rb", "foo/baz.rb"])
+        allow(cli).to receive(:run)
+      end
+
+      it 'runs scenario' do
+        cli.test('foo')
+        expect(cli).to have_received(:run).with("foo/bar.rb")
+        expect(cli).to have_received(:run).with("foo/baz.rb")
+      end
+    end
+  end
+
+  describe 'run' do
+    before do
       class Foo
         def initialize(config); end
         def method; end
@@ -91,13 +130,11 @@ describe 'Shoot::CLI' do
       allow_any_instance_of(Foo).to receive(:shoot)
       expect_any_instance_of(Foo).to receive(:ok)
 
-      allow(cli).to receive(:_active).and_return(["foo"])
-      allow(cli).to receive(:require_file)
+      allow(cli).to receive(:get_const_from_file).with("foo.rb").and_return(Foo)
     end
 
     it 'runs scenario' do
-      cli.scenario('foo.rb')
-      expect(cli).to have_received(:require_file)
+      cli.run('foo.rb', foo: :bar)
     end
   end
 
