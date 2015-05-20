@@ -67,6 +67,16 @@ This will run all the methods of MyScenario and generate screenshots for all act
 
 The resulting images will be saved on <font size="7">	`.screenshots`</font> folder.
 
+If you wanna just test your scenarios, without paying SauceLabs and wasting time with remote connections:
+
+	$ shoot test my_scenario.rb
+	
+Or you can run a whole folder, like:
+
+	$ shoot test my_scenarios/
+
+The `test` command will run locally using phantomjs (capybara).
+
 You can choose to deactivate the browsers you don't wanna use, based on id as well. Example:
 
 	$ shoot deactivate 2
@@ -76,6 +86,10 @@ This will deactivate (given your output is the same as above) chrome 16 on OS X 
 If you want to deactivate all the active browsers at once you can run:
 
 	$ shoot deactivate_all
+
+To open all screenshots (on a Mac), run:
+
+	$ shoot open
 
 
 ## Contributing
