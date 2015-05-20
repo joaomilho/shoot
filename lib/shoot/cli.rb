@@ -7,6 +7,13 @@ module Shoot
     require 'fileutils'
     FileUtils::mkdir_p '.screenshots'
     BROWSERS_PATH = '.screenshots/.browsers.json'
+    map %w[--version -v] => :version
+
+    desc 'version, --version, -v', 'Shoot version'
+    def version
+      puts Shoot::VERSION
+    end
+
 
     desc 'list', 'List all platforms. Optionally pass a filter (e.g. browserstack list ie)'
     def list(filter = nil)
