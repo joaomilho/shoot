@@ -35,6 +35,9 @@ class Shoot::Scenario
     require 'fileutils'
     FileUtils::mkdir_p '.screenshots'
     save_screenshot(".screenshots/#{method} #{platform_name}.png")
+  rescue => e
+    puts "FAILED #{method}: #{e.inspect}"
+    save_screenshot(".screenshots/failed #{method} #{platform_name}.png")
   end
 
   def ok
