@@ -14,6 +14,10 @@ module Shoot
       puts Shoot::VERSION
     end
 
+    desc 'open', 'Opens all screenshots taken'
+    def open
+      open_all_screenshots
+    end
 
     desc 'list', 'List all platforms. Optionally pass a filter (e.g. browserstack list ie)'
     def list(filter = nil)
@@ -26,19 +30,15 @@ module Shoot
     end
 
     desc 'scenario', 'Runs the given scenario on all active platforms or one platform, based on ID'
-    def scenario(file, id = nil, test = 'all')
-      require_file(file)
-      klass_name = File.basename(file, '.rb').split('_').map(&:capitalize).join
-      klass = Kernel.const_get(klass_name)
-
+    def scenario(file, id = nil)
       runners = id ? [json[id.to_i]] : _active
-      runners.each do |config|
-        instance = klass.new(config)
-        klass.instance_methods(false).each do |method|
-          instance.shoot(method)
-        end
-        instance.ok
-      end
+      runners.each {|config| run file, config }
+    end
+
+    desc 'test', 'Runs the given scenario or all files in a directory on a local phantomjs'
+    def test(path)
+      files = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
+      files.each{|file| run file }
     end
 
     desc 'activate', 'Activate one platform, based on ID or interval'
@@ -65,8 +65,31 @@ module Shoot
     end
 
     no_commands do
+      def open_all_screenshots
+        `open .screenshots/*.png`
+      end
+
+      def run(file, config=nil)
+        klass = get_const_from_file(file)
+        instance = klass.new(config)
+        klass.instance_methods(false).each do |method|
+          instance.shoot(method)
+        end
+        instance.ok
+      end
+
       def require_file(file)
         require Dir.pwd + '/' + file
+      end
+
+      def constantize_file_name(file)
+        klass_name = File.basename(file, '.rb').split('_').map(&:capitalize).join
+        Kernel.const_get(klass_name)
+      end
+
+      def get_const_from_file(file)
+        require_file(file)
+        constantize_file_name(file)
       end
 
       def table(browsers)
