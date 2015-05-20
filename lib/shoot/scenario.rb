@@ -1,6 +1,5 @@
 require 'selenium-webdriver'
 require 'capybara'
-
 class Shoot::Scenario
   URL = sprintf 'http://%s:%s@hub.browserstack.com/wd/hub',
                 ENV['BROWSERSTACK_USER'],
@@ -8,15 +7,22 @@ class Shoot::Scenario
 
   include Capybara::DSL
 
-  def initialize(platform)
-    @platform = platform
-    config_capabilities
+  def initialize(platform=nil)
+    if platform
+      @platform = platform
+      config_capabilities
 
-    Capybara.register_driver platform_name do |app|
-      Capybara::Selenium::Driver.new(app,
-                                     browser: :remote,
-                                     url: URL,
-                                     desired_capabilities: @capabilities)
+      Capybara.register_driver platform_name do |app|
+        Capybara::Selenium::Driver.new(app,
+                                       browser: :remote,
+                                       url: URL,
+                                       desired_capabilities: @capabilities)
+        end
+    else
+      require 'capybara/poltergeist'
+
+      Capybara.run_server = false
+      @platform_name = :poltergeist
     end
 
     puts "Running #{platform_name}"
