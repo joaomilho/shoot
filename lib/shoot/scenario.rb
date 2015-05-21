@@ -1,5 +1,7 @@
 require 'selenium-webdriver'
 require 'capybara'
+require 'timeout'
+
 class Shoot::Scenario
   URL = sprintf 'http://%s:%s@hub.browserstack.com/wd/hub',
                 ENV['BROWSERSTACK_USER'],
@@ -24,12 +26,20 @@ class Shoot::Scenario
       Capybara.run_server = false
       @platform_name = :poltergeist
     end
-
-    puts "Running #{platform_name}"
+    Capybara.default_wait_time = 10
     Capybara.current_driver = platform_name
   end
 
   def shoot(method)
+  def find *args
+    Timeout.timeout(10) do
+      begin
+        super *args
+      rescue
+        retry
+      end
+    end
+  end
     send(method)
     Kernel.sleep(1) # Just in case
     require 'fileutils'
