@@ -3,7 +3,7 @@ require 'capybara'
 
 describe 'Shoot::Scenario' do
 
-  describe 'shoot' do
+  describe 'run' do
     before do
       allow(Capybara).to receive(:register_driver).with("browser 5.0 os 22.0")
       allow(Capybara).to receive(:current_driver=).with("browser 5.0 os 22.0")
@@ -21,8 +21,8 @@ describe 'Shoot::Scenario' do
       allow(@scenario).to receive(:save_screenshot)
     end
 
-    it 'shoots' do
-      @scenario.shoot(:foo)
+    it 'runs' do
+      @scenario.run(:foo)
       expect(@scenario).to have_received(:foo)
       expect(@scenario).to have_received(:save_screenshot)
     end

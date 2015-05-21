@@ -127,7 +127,7 @@ describe 'Shoot::CLI' do
         def method; end
       end
 
-      allow_any_instance_of(Foo).to receive(:shoot)
+      allow_any_instance_of(Foo).to receive(:run)
       expect_any_instance_of(Foo).to receive(:ok)
 
       allow(cli).to receive(:get_const_from_file).with("foo.rb").and_return(Foo)
