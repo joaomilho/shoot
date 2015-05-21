@@ -30,7 +30,6 @@ class Shoot::Scenario
     Capybara.current_driver = platform_name
   end
 
-  def shoot(method)
   def find *args
     Timeout.timeout(10) do
       begin
@@ -40,22 +39,22 @@ class Shoot::Scenario
       end
     end
   end
+
+  def run(method)
+    @current_method = method
     send(method)
-    Kernel.sleep(1) # Just in case
-    require 'fileutils'
-    FileUtils::mkdir_p '.screenshots'
-    save_screenshot(".screenshots/#{method} #{platform_name}.png")
+    #Kernel.sleep(1) # Just in case
+    shoot(:finish)
+    [true, nil]
   rescue => e
-    puts "FAILED #{method}: #{e.inspect}"
-    save_screenshot(".screenshots/failed #{method} #{platform_name}.png")
+    #puts "FAILED #{method}: #{e.inspect}"
+    shoot(:failed)
+    [false, e]
   end
 
   def ok
-    puts 'OK'
     page.driver.quit
   end
-
-  private
 
   def platform_name
     @platform_name ||= if @platform['device']
@@ -64,6 +63,18 @@ class Shoot::Scenario
                          name_items = %w(browser browser_version os os_version)
                          @platform.values_at(*name_items).join(' ')
                        end
+  end
+
+  private
+
+  def shoot(label)
+    directory = ".screenshots/#{platform_name.to_s.gsub(" ", "_")}/#{self.class.name}/#{@current_method}"
+    unless Dir.exist?(directory)
+      require 'fileutils'
+      FileUtils::mkdir_p directory
+    end
+
+    save_screenshot("#{directory}/#{label}.png")
   end
 
   def config_capabilities # rubocop:disable AbcSize
