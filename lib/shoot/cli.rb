@@ -66,7 +66,7 @@ module Shoot
 
     no_commands do
       def open_all_screenshots
-        `open .screenshots/*.png`
+        `open #{Dir.glob(".screenshots/**/*.png").join(" ")}`
       end
 
       def run(file, config=nil)
