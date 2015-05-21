@@ -72,8 +72,17 @@ module Shoot
       def run(file, config=nil)
         klass = get_const_from_file(file)
         instance = klass.new(config)
+        puts set_color instance.platform_name, :white, :bold
         klass.instance_methods(false).each do |method|
-          instance.shoot(method)
+          print set_color "  ➥ #{klass}##{method} ... ", :white, :bold
+
+          ok, error = instance.run(method)
+          if ok
+            print set_color "OK\n", :green
+          else
+            print set_color "FAILED\n", :red
+            puts set_color "    ⚠ #{error}", :red
+          end
         end
         instance.ok
       end
