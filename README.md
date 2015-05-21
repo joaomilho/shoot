@@ -63,9 +63,29 @@ Now run:
 
 	$ shoot scenario my_scenario.rb
 	
-This will run all the methods of MyScenario and generate screenshots for all active browsers.
+This will run all the methods of MyScenario and generate screenshots for all active browsers, at the end of each method.
 
 The resulting images will be saved on <font size="7">	`.screenshots`</font> folder.
+
+If you wanna have multiple shots on each method, use the `shoot` method:
+
+```ruby
+class MyScenario < Shoot::Scenario
+	def login
+		visit "http://url.to.login"
+		shoot(:blank_form)
+		
+		fill_in('user', with: 'john')
+		fill_in('password', with: '1234')
+		shoot(:filled_form)
+		
+		click_button('Login')
+		find('#welcome') # This makes sure it waits before you take another shot
+		shoot(:welcome_page)
+	end
+end
+```
+
 
 If you wanna just test your scenarios, without paying SauceLabs and wasting time with remote connections:
 
