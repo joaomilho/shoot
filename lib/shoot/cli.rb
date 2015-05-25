@@ -76,7 +76,10 @@ module Shoot
     desc 'test', 'Runs the given scenario or all files in a directory on a local phantomjs'
     def test(path)
       files = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
-      files.each{|file| run file }
+      elapsed_time do
+        files.each{|file| run file, nil }
+        print set_color("\nAll tests finished", :blue)
+      end
     end
 
     desc 'activate ID', 'Activate platforms, based on IDs'
@@ -104,6 +107,19 @@ module Shoot
     end
 
     no_commands do
+      def elapsed_time
+        require 'benchmark'
+
+        elapsed_time = Benchmark.measure do
+          yield
+        end
+        print set_color "  (#{elapsed_time.real.to_i}s)\n", :blue
+      end
+
+      def desc(command)
+        CLI.commands[command.to_s].description rescue nil
+      end
+
       def _activate(ids)
         return puts "No ids provided, e.g. 'activate 123'" if ids.empty?
         ids.map!(&:to_i)
@@ -124,20 +140,20 @@ module Shoot
         `open #{Dir.glob(".screenshots/**/*.png").join(" ")}`
       end
 
-      def run(file, config=nil)
+      def run(file, config = nil)
         klass = get_const_from_file(file)
         instance = klass.new(config)
         puts set_color instance.platform_name, :white, :bold
         klass.instance_methods(false).each do |method|
           print set_color "  ➥ #{klass}##{method} ... ", :white, :bold
+          error = nil
 
-          ok, error = instance.run(method)
-          if ok
-            print set_color "OK\n", :green
-          else
-            print set_color "FAILED\n", :red
-            puts set_color "    ⚠ #{error}", :red
+          elapsed_time do
+            ok, error = instance.run(method)
+
+            print ok ? set_color("OK", :green) : set_color("FAILED", :red)
           end
+          puts set_color "    ⚠ #{error}", :red if error
         end
         instance.ok
       end
