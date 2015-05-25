@@ -97,6 +97,12 @@ module Shoot
       save_json
     end
 
+    desc 'update', 'Update browser list (WARNING: will override active browsers)'
+    def update
+      update_json
+      list
+    end
+
     no_commands do
       def _activate(ids)
         return puts "No ids provided, e.g. 'activate 123'" if ids.empty?
@@ -166,8 +172,12 @@ module Shoot
         ]
       end
 
+      def update_json
+        File.write(BROWSERS_PATH, JSON.dump(fetch_json_and_prepare))
+      end
+
       def json
-        File.write(BROWSERS_PATH, JSON.dump(fetch_json_and_prepare)) unless File.exist?(BROWSERS_PATH)
+        update_json unless File.exist?(BROWSERS_PATH)
         @json ||= JSON.parse(File.read(BROWSERS_PATH))
       end
 
