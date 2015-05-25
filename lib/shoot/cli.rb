@@ -165,7 +165,7 @@ module Shoot
 
       def to_row(p)
         [
-          p['id'].to_s.colorize(p['active'] ? :green : :red),
+          set_color(p['id'].to_s, p['active'] ? :green : :red),
           "#{p['os']} #{p['os_version']}",
           "#{p['browser']} #{p['browser_version']}",
           p['device']
