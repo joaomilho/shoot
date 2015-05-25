@@ -111,6 +111,39 @@ To open all screenshots (on a Mac), run:
 
 	$ shoot open
 
+### Interactive mode
+
+Sometimes running all the commands above becomes annoying. Here's where the interactive mode comes to the rescue. Just run any of the commands below: 
+
+    # shoot -i
+    # shoot --interactive
+    # shoot interactive    
+    
+And you'll be prompted for actions. You can run things like:
+
+	(interactive mode) # list ie
+	(interactive mode) # activate 12 34 56
+	(interactive mode) # test /my_test_folder
+	(interactive mode) # open
+	(interactive mode) # deactivate 12
+	(interactive mode) # update	
+	
+You got the idea.				
+
+### List of commands
+
+	shoot activate IDs                    # Activate platforms, based on IDs
+	shoot active                          # List active platforms.
+	shoot deactivate IDs                  # Deactivate platforms, based on IDs
+	shoot deactivate_all                  # Deactivate all the platforms
+	shoot help [COMMAND]                  # Describe available commands or one specific 
+	shoot interactive, --interactive, -i  # Interactive mode
+	shoot list [FILTER]                   # List all platforms. Optionally passing a filter
+	shoot open                            # Opens all screenshots taken
+	shoot scenario PATH                   # Runs the given scenario or all files in a directory on all active platforms
+	shoot test PATH                       # Runs the given scenario or all files in a directory on a local phantomjs
+	shoot update                          # Update browser list (WARNING: will override active browsers)
+	shoot version, --version, -v          # Shoot version
 
 ## Contributing
 
