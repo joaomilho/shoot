@@ -1,5 +1,6 @@
 require 'thor'
 require 'json'
+require 'highline/import'
 
 module Shoot
   class CLI < Thor
@@ -7,10 +8,40 @@ module Shoot
     FileUtils::mkdir_p '.screenshots'
     BROWSERS_PATH = '.screenshots/.browsers.json'
     map %w[--version -v] => :version
+    map %w[--interactive -i] => :interactive
 
     desc 'version, --version, -v', 'Shoot version'
     def version
       puts Shoot::VERSION
+    end
+
+    desc 'interactive, --interactive, -i', 'Activate one platform, based on ID or interval'
+    def interactive
+      @exit = false
+
+      available_commands = {
+        active:         ->(_)     { active },
+        activate:       ->(params){ activate(*params.split(" ")) },
+        deactivate:     ->(params){ deactivate(*params.split(" ")) },
+        deactivate_all: ->(_)     { deactivate_all },
+        list:           ->(params){ list(params) },
+        open:           ->(_)     { open },
+        test:           ->(params){ test(params) },
+        scenario:       ->(params){ scenario(params) },
+        update:         ->(_)     { update },
+        exit:           ->(_)     { @exit = true }
+      }
+
+      while ! @exit
+        choose do |menu|
+          menu.layout = :menu_only
+          menu.shell  = true
+
+          available_commands.each do |command_name, command_action|
+            menu.choice(command_name, desc(command_name)){|_, details| command_action.call(details) }
+          end
+        end
+      end
     end
 
     desc 'open', 'Opens all screenshots taken'
