@@ -89,8 +89,9 @@ describe 'Shoot::CLI' do
 
     it 'runs scenario' do
       cli.scenario('foo.rb')
-      expect(cli).to have_received(:run)
+      expect(cli).to have_received(:run).with("foo.rb", "foo")
     end
+
   end
 
   describe 'test' do
@@ -101,7 +102,7 @@ describe 'Shoot::CLI' do
 
       it 'runs scenario' do
         cli.test('foo.rb')
-        expect(cli).to have_received(:run).with("foo.rb")
+        expect(cli).to have_received(:run).with("foo.rb", nil)
       end
     end
 
@@ -114,8 +115,8 @@ describe 'Shoot::CLI' do
 
       it 'runs scenario' do
         cli.test('foo')
-        expect(cli).to have_received(:run).with("foo/bar.rb")
-        expect(cli).to have_received(:run).with("foo/baz.rb")
+        expect(cli).to have_received(:run).with("foo/bar.rb", nil)
+        expect(cli).to have_received(:run).with("foo/baz.rb", nil)
       end
     end
   end
@@ -126,15 +127,15 @@ describe 'Shoot::CLI' do
         def initialize(config); end
         def method; end
       end
-
-      allow_any_instance_of(Foo).to receive(:run)
+      allow_any_instance_of(Foo).to receive(:run).and_return([true, ""])
+      allow_any_instance_of(Foo).to receive(:platform_name)
       expect_any_instance_of(Foo).to receive(:ok)
 
       allow(cli).to receive(:get_const_from_file).with("foo.rb").and_return(Foo)
     end
 
     it 'runs scenario' do
-      cli.run('foo.rb', foo: :bar)
+      cli.run('foo.rb', {foo: :bar})
     end
   end
 
