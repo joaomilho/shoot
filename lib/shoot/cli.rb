@@ -15,7 +15,7 @@ module Shoot
       puts Shoot::VERSION
     end
 
-    desc 'interactive, --interactive, -i', 'Activate one platform, based on ID or interval'
+    desc 'interactive, --interactive, -i', 'Interactive mode'
     def interactive
       @exit = false
 
@@ -49,7 +49,7 @@ module Shoot
       open_all_screenshots
     end
 
-    desc 'list', 'List all platforms. Optionally pass a filter (e.g. browserstack list ie)'
+    desc 'list [FILTER]', 'List all platforms. Optionally passing a filter'
     def list(filter = nil)
       table json.select { |p| p.inspect =~ /#{filter}/i }
     end
@@ -59,7 +59,7 @@ module Shoot
       table _active
     end
 
-    desc 'scenario', 'Runs the given scenario or all files in a directory on all active platforms'
+    desc 'scenario PATH', 'Runs the given scenario or all files in a directory on all active platforms'
     def scenario(path)
       files = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
 
@@ -73,7 +73,7 @@ module Shoot
       end
     end
 
-    desc 'test', 'Runs the given scenario or all files in a directory on a local phantomjs'
+    desc 'test PATH', 'Runs the given scenario or all files in a directory on a local phantomjs'
     def test(path)
       files = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
       elapsed_time do
@@ -82,12 +82,12 @@ module Shoot
       end
     end
 
-    desc 'activate ID', 'Activate platforms, based on IDs'
+    desc 'activate IDs', 'Activate platforms, based on IDs'
     def activate(*ids)
       _activate(ids)
     end
 
-    desc 'deactivate', 'Deactivate platforms, based on IDs'
+    desc 'deactivate IDs', 'Deactivate platforms, based on IDs'
     def deactivate(*ids)
       _deactivate(ids)
     end
