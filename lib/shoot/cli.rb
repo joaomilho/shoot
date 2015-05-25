@@ -1,6 +1,5 @@
 require 'thor'
 require 'json'
-require 'colorize'
 
 module Shoot
   class CLI < Thor
