@@ -79,19 +79,14 @@ module Shoot
       files.each{|file| run file }
     end
 
-    desc 'activate', 'Activate one platform, based on ID or interval'
-    def activate(from_id, to_id = from_id)
-      ids = (from_id.to_i..to_id.to_i).to_a
-      ids.each { |id| json[id]['active'] = true }
-      save_json
-      table json[from_id.to_i - 2, ids.size + 4]
+    desc 'activate ID', 'Activate platforms, based on IDs'
+    def activate(*ids)
+      _activate(ids)
     end
 
-    desc 'deactivate', 'Deactivate one platform, based on ID'
-    def deactivate(id)
-      json[id.to_i]['active'] = false
-      save_json
-      table json[id.to_i - 2, 5]
+    desc 'deactivate', 'Deactivate platforms, based on IDs'
+    def deactivate(*ids)
+      _deactivate(ids)
     end
 
     desc 'deactivate_all', 'Deactivate all the platforms'
@@ -103,6 +98,22 @@ module Shoot
     end
 
     no_commands do
+      def _activate(ids)
+        return puts "No ids provided, e.g. 'activate 123'" if ids.empty?
+        ids.map!(&:to_i)
+        ids.each { |id| json[id]['active'] = true }
+        save_json
+        table json.select{|item| ids.include?(item['id']) }
+      end
+
+      def _deactivate(ids)
+        return puts "No ids provided, e.g. 'deactivate 123'" if ids.empty?
+        ids.map!(&:to_i)
+        ids.each { |id| json[id]['active'] = false }
+        save_json
+        table json.select{|item| ids.include?(item['id']) }
+      end
+
       def open_all_screenshots
         `open #{Dir.glob(".screenshots/**/*.png").join(" ")}`
       end
