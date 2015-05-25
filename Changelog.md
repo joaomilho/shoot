@@ -5,6 +5,7 @@
 - Activate and deactivate accepts a list of ids (instead of 1 or a range);
 - Adds time elapsed for each test and for the whole suite;
 - Adds update command to download all browsers again (`shoot update`);
+- Allow to execute a whole folder (`shoot scenario folder/`);
 
 # 1.1.0
 

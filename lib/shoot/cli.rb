@@ -59,10 +59,18 @@ module Shoot
       table _active
     end
 
-    desc 'scenario', 'Runs the given scenario on all active platforms or one platform, based on ID'
-    def scenario(file, id = nil)
-      runners = id ? [json[id.to_i]] : _active
-      runners.each {|config| run file, config }
+    desc 'scenario', 'Runs the given scenario or all files in a directory on all active platforms'
+    def scenario(path)
+      files = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
+
+      elapsed_time do
+        _active.each do |config|
+          files.each do |file|
+            run file, config
+          end
+        end
+        print set_color("\nAll tests finished", :blue)
+      end
     end
 
     desc 'test', 'Runs the given scenario or all files in a directory on a local phantomjs'
