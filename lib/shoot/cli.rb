@@ -4,6 +4,16 @@ require 'highline/import'
 
 module Shoot
   class CLI < Thor
+
+    EMULATORS_UNAVAILABLE_ON_THE_API = ["iPad 3rd", "iPad 3rd (6.0)", "iPad Mini", "iPad 4th", "iPhone 4S", "iPhone 4S (6.0)", "iPhone 5", "iPhone 5S"].map do |device|
+      {
+        browser: "iPhone",
+        os: "MAC",
+        device: device,
+        emulator: true
+      }
+    end
+
     require 'fileutils'
     FileUtils::mkdir_p '.screenshots'
     BROWSERS_PATH = '.screenshots/.browsers.json'
@@ -175,7 +185,7 @@ module Shoot
       def table(browsers)
         table = browsers.map do |p|
           to_row(p)
-        end.unshift(['ID', 'OS #', 'Browser #', 'Device'])
+        end.unshift(['ID', 'OS #', 'Browser #', 'Device', 'Emulator'])
         print_table table, truncate: true
       end
 
@@ -184,7 +194,8 @@ module Shoot
           set_color(p['id'].to_s, p['active'] ? :green : :red),
           "#{p['os']} #{p['os_version']}",
           "#{p['browser']} #{p['browser_version']}",
-          p['device']
+          p['device'],
+          p['emulator'] ? 'Yes' : set_color('No', :black)
         ]
       end
 
@@ -207,11 +218,12 @@ module Shoot
 
       def fetch_json_and_prepare
         require 'rest_client'
-        JSON.parse(RestClient.get("https://#{ENV['BROWSERSTACK_USER']}:#{ENV['BROWSERSTACK_KEY']}@www.browserstack.com/automate/browsers.json")).tap do |json|
-          json.each_with_index do |browser, index|
-            browser['id'] = index
-          end
+        json = JSON.parse(RestClient.get("https://#{ENV['BROWSERSTACK_USER']}:#{ENV['BROWSERSTACK_KEY']}@www.browserstack.com/automate/browsers.json"))
+        json += EMULATORS_UNAVAILABLE_ON_THE_API
+        json.each_with_index do |browser, index|
+          browser['id'] = index
         end
+        json
       end
     end
   end
