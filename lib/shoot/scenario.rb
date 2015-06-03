@@ -87,6 +87,7 @@ class Shoot::Scenario
     @capabilities[:browserName] = @platform['browser']
     @capabilities[:platform] = @platform['os']
     @capabilities[:device] = @platform['device'] if @platform['device']
+    @capabilities[:emulator] = @platform['emulator']
   end
 
 end
