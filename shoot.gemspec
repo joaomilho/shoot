@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rest-client", "~> 1.7"
   spec.add_dependency "poltergeist", "~> 1.6"
   spec.add_dependency "highline", "~> 1.7"
+  spec.add_dependency "childprocess", "~> 0.5"
 end
