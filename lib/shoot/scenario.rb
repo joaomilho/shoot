@@ -46,6 +46,7 @@ class Shoot::Scenario
     shoot(:finish)
     [true, nil]
   rescue => e
+    File.write("#{directory}/backtrace.txt", e.backtrace.join("\n"))
     shoot(:failed)
     [false, e]
   end
