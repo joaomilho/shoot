@@ -145,6 +145,38 @@ You got the idea.
 	shoot update                          # Update browser list (WARNING: will override active browsers)
 	shoot version, --version, -v          # Shoot version
 
+### Using ngrok
+
+In order to access your local development environment on BrowserStack you need to forward it somehow to the external work (a.k.a. the internet). BrowserStack has it's own forwarded, but ngrok is better. If you wanna use it:
+
+1. Install it from [https://ngrok.com/download](https://ngrok.com/download)
+
+2. Enable subdomains by registering.
+
+3. Use the `Shoot::Ngrok` class in your test, like this:
+
+``` ruby
+  def my_test
+    my_server = Shoot::Ngrok(12345)
+    visit my_server.url
+  end
+```
+
+Where `12345` is the port of your local server. The default is `3000`, since I believe you're probably using Rails.
+
+#### What if I'm using pow?
+
+If you're using pow, skip step 3 above and do it like this instead:
+
+``` ruby
+  def my_test
+    my_server = Shoot::NgrokPow(:my_server_folder)
+    visit my_server.url
+  end
+```
+
+NgrokPow will create another symlink of your server folder with a unique name and forward it correctly to ngrok. This symlink will be properly removed at the end of the execution of shoot.
+
 ## Contributing
 
 1. Fork it ( https://github.com/joaomilho/shoot/fork )
