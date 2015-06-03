@@ -1,3 +1,11 @@
+# 2.1.0
+
+- Adds Ngrok and NgrokPow class to make forwarding much easier;
+- Adds a list of _ad hoc_ emulators BrowserStack provides for iPhones/iPads that is not on the API; 😢
+- Writes a backtrace files in the appropriate folder if the thing explodes (both external and internal issues);
+- Updates the Changelog to contain this.
+
+
 # 2.0.0
 
 - Adds interactive mode (`shoot -i`);
