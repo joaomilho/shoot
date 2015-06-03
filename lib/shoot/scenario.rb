@@ -66,14 +66,19 @@ class Shoot::Scenario
 
   private
 
-  def shoot(label)
-    directory = ".screenshots/#{platform_name.to_s.gsub(" ", "_")}/#{self.class.name}/#{@current_method}"
-    unless Dir.exist?(directory)
-      require 'fileutils'
-      FileUtils::mkdir_p directory
+  def directory
+    ".screenshots/#{platform_name.to_s.gsub(" ", "_")}/#{self.class.name}/#{@current_method}".tap do |dir|
+      unless Dir.exist?(dir)
+        require 'fileutils'
+        FileUtils::mkdir_p dir
+      end
     end
+  end
 
+  def shoot(label)
     save_screenshot("#{directory}/#{label}.png")
+  rescue => e
+    File.write("#{directory}/#{label}.error.txt", %(#{e.inspect}\n\n#{e.backtrace.join("\n")}))
   end
 
   def config_capabilities # rubocop:disable AbcSize
