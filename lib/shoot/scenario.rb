@@ -43,11 +43,9 @@ class Shoot::Scenario
   def run(method)
     @current_method = method
     send(method)
-    #Kernel.sleep(1) # Just in case
     shoot(:finish)
     [true, nil]
   rescue => e
-    #puts "FAILED #{method}: #{e.inspect}"
     shoot(:failed)
     [false, e]
   end
