@@ -8,14 +8,13 @@ describe 'Shoot::Scenario' do
       allow(Capybara).to receive(:register_driver).with("browser 5.0 os 22.0")
       allow(Capybara).to receive(:current_driver=).with("browser 5.0 os 22.0")
       allow(FileUtils).to receive(:mkdir_p)
-      allow(Kernel).to receive(:sleep)
 
-      @scenario = Shoot::Scenario.new({
+      @scenario = Shoot::Scenario.new(OpenStruct.new({
         'browser' => 'browser',
         'browser_version' => '5.0',
         'os' => 'os',
         'os_version' => '22.0'
-      })
+      }))
 
       allow(@scenario).to receive(:foo)
       allow(@scenario).to receive(:save_screenshot)

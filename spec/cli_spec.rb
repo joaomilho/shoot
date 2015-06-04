@@ -1,4 +1,4 @@
-require_relative '../lib/shoot/cli'
+require_relative '../lib/shoot'
 
 describe 'Shoot::CLI' do
   subject(:cli) do
@@ -7,18 +7,18 @@ describe 'Shoot::CLI' do
 
   let(:mock_json) do
     [
-      {os: "Foo", os_version: "Foo 1", browser: "Foo browser", device: nil, browser_version: "6.0", id: 0, 'active' => false},
-      {os: "Bar", os_version: "Bar 2", browser: "Bar browser", device: nil, browser_version: "7.0", id: 1, 'active' => true}
+      {id: 0, os: "Foo", os_version: "Foo 1", browser: "Foo browser", device: nil, browser_version: "6.0", active: false, emulator: false},
+      {id: 1, os: "Bar", os_version: "Bar 2", browser: "Bar browser", device: nil, browser_version: "7.0", active: true, emulator: false}
     ]
   end
 
   before do
-    allow(cli).to receive(:json).and_return(mock_json)
+    allow(Shoot::Browser).to receive(:fetch_json).and_return(mock_json)
+    allow(cli).to receive(:table) {|arg| arg.map(&:to_h) }
   end
 
   describe 'list' do
     before do
-      allow(cli).to receive(:table) {|arg| arg }
     end
 
     context 'list all' do
@@ -36,10 +36,6 @@ describe 'Shoot::CLI' do
   end
 
   describe 'active' do
-    before do
-      allow(cli).to receive(:table) {|arg| arg }
-    end
-
     it 'displays the active browsers' do
       expect(cli.active).to eq([mock_json[1]])
     end
@@ -48,42 +44,44 @@ describe 'Shoot::CLI' do
   describe 'activate' do
     before do
       allow(cli).to receive(:table) {|arg| arg }
-      allow(cli).to receive(:save_json)
+      allow(Shoot::Browser).to receive(:save)
     end
 
     it 'activates the browser' do
-      expect{ cli.activate(0) }.to change{ mock_json[0]['active'] }.from(false).to(true)
-      expect(cli).to have_received(:save_json)
+      expect{ cli.activate(0) }.to change{ Shoot::Browser.all[0].active }.from(false).to(true)
+      expect(Shoot::Browser).to have_received(:save)
     end
   end
 
   describe 'deactivate' do
     before do
       allow(cli).to receive(:table) {|arg| arg }
-      allow(cli).to receive(:save_json)
+      allow(Shoot::Browser).to receive(:save)
     end
 
     it 'deactivates the browser' do
-      expect{ cli.deactivate(1) }.to change{ mock_json[1]['active'] }.from(true).to(false)
-      expect(cli).to have_received(:save_json)
+      Shoot::Browser.all[1].activate
+      expect{ cli.deactivate(1) }.to change{ Shoot::Browser.all[1].active }.from(true).to(false)
+      expect(Shoot::Browser).to have_received(:save)
     end
   end
 
   describe 'deactivate_all' do
     before do
       allow(cli).to receive(:table) {|arg| arg }
-      allow(cli).to receive(:save_json)
+      allow(Shoot::Browser).to receive(:save)
     end
 
     it 'deactivates the browser' do
-      expect{ cli.deactivate_all }.to change{ mock_json[1]['active'] }.from(true).to(false)
-      expect(cli).to have_received(:save_json)
+      Shoot::Browser.all[1].activate
+      expect{ cli.deactivate_all }.to change{ Shoot::Browser.all[1].active }.from(true).to(false)
+      expect(Shoot::Browser).to have_received(:save)
     end
   end
 
   describe 'scenario' do
     before do
-      allow(cli).to receive(:_active).and_return(["foo"])
+      allow(Shoot::Browser).to receive(:active).and_return(["foo"])
       allow(cli).to receive(:run)
     end
 
@@ -102,7 +100,7 @@ describe 'Shoot::CLI' do
 
       it 'runs scenario' do
         cli.test('foo.rb')
-        expect(cli).to have_received(:run).with("foo.rb", nil)
+        expect(cli).to have_received(:run).with("foo.rb")
       end
     end
 
@@ -115,8 +113,8 @@ describe 'Shoot::CLI' do
 
       it 'runs scenario' do
         cli.test('foo')
-        expect(cli).to have_received(:run).with("foo/bar.rb", nil)
-        expect(cli).to have_received(:run).with("foo/baz.rb", nil)
+        expect(cli).to have_received(:run).with("foo/bar.rb")
+        expect(cli).to have_received(:run).with("foo/baz.rb")
       end
     end
   end
@@ -129,9 +127,9 @@ describe 'Shoot::CLI' do
       end
       allow_any_instance_of(Foo).to receive(:run).and_return([true, ""])
       allow_any_instance_of(Foo).to receive(:platform_name)
-      expect_any_instance_of(Foo).to receive(:ok)
+      expect_any_instance_of(Foo).to receive(:quit)
 
-      allow(cli).to receive(:get_const_from_file).with("foo.rb").and_return(Foo)
+      allow_any_instance_of(Shoot::ScenarioRunner).to receive(:get_const_from_file).with("foo.rb").and_return(Foo)
     end
 
     it 'runs scenario' do
