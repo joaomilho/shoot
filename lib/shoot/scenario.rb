@@ -51,16 +51,20 @@ class Shoot::Scenario
     [false, e]
   end
 
-  def ok
+  def quit
     page.driver.quit
   end
 
   def platform_name
-    @platform_name ||= if @platform['device']
-                         @platform['device']
+    @platform_name ||= if @platform.device
+                         @platform.device
                        else
-                         name_items = %w(browser browser_version os os_version)
-                         @platform.values_at(*name_items).join(' ')
+                         [
+                           @platform.browser,
+                           @platform.browser_version,
+                           @platform.os,
+                           @platform.os_version
+                         ].join(' ')
                        end
   end
 
@@ -83,16 +87,16 @@ class Shoot::Scenario
 
   def config_capabilities # rubocop:disable AbcSize
     @capabilities = Selenium::WebDriver::Remote::Capabilities.new
-    @capabilities[:browser] = @platform['browser']
-    @capabilities[:browser_version] = @platform['browser_version']
-    @capabilities[:os] = @platform['os']
-    @capabilities[:os_version] = @platform['os_version']
+    @capabilities[:browser] = @platform.browser
+    @capabilities[:browser_version] = @platform.browser_version
+    @capabilities[:os] = @platform.os
+    @capabilities[:os_version] = @platform.os_version
     @capabilities['browserstack.debug'] = 'true'
-    @capabilities[:name] = "Digital Goods - #{@platform}"
-    @capabilities[:browserName] = @platform['browser']
-    @capabilities[:platform] = @platform['os']
-    @capabilities[:device] = @platform['device'] if @platform['device']
-    @capabilities[:emulator] = @platform['emulator']
+    @capabilities[:name] = "Digital Goods - #{@platform.to_h}"
+    @capabilities[:browserName] = @platform.browser
+    @capabilities[:platform] = @platform.os
+    @capabilities[:device] = @platform.device if @platform.device
+    @capabilities[:emulator] = @platform.emulator
   end
 
 end
