@@ -3,6 +3,8 @@
 
 # Shoot
 
+[![Join the chat at https://gitter.im/joaomilho/shoot](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/joaomilho/shoot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Shoot is a helper library to take screenshots using BrowserStack. If you don't need a full integration test coupled with screenshots, it's a simpler choice.
 
 ## Installation
