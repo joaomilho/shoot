@@ -3,7 +3,7 @@
 
 # Shoot
 
-Shoot is a helper library to take screenshots using BrowserStack. If you don't need a full integration test coupled with screenshots, it's a simpler choice.
+Shoot is a helper library to take screenshots using [BrowserStack](https://www.browserstack.com/). If you don't need a full integration test coupled with screenshots, it's a simpler choice.
 
 ## Installation
 
@@ -39,13 +39,11 @@ The first thing you should do is:
 	538  ios 7.0             iphone        iPhone 5S
 	539  ios 7.0             iphone        iPhone 5C
 	
-The `list` command basically fetches all browsers available on BrowserStack and caches them locally on `.screenshots/.browsers.json`. You can choose to add this folder on your `.gitignore`, since shoot will save all images there as well.
+The `list` command basically fetches all browsers available on [BrowserStack](https://www.browserstack.com/) and caches them locally on `.screenshots/.browsers.json`. You can choose to add this folder on your `.gitignore`, since shoot will save all images there as well.
 
 Then, you can choose to activate the browsers you wanna use, based on id. Example:
 
 	$ shoot activate 2
-
-This will activate (given your output is the same as above) chrome 16 on OS X Snow Leopard.
 
 Now, create a scenario. Here's an example:
 
@@ -87,7 +85,7 @@ end
 ```
 
 
-If you wanna just test your scenarios, without paying BrowserStack and wasting time with remote connections:
+If you wanna just test your scenarios, without paying [BrowserStack](https://www.browserstack.com/) and wasting time with remote connections:
 
 	$ shoot test my_scenario.rb
 	
@@ -95,13 +93,11 @@ Or you can run a whole folder, like:
 
 	$ shoot test my_scenarios/
 
-The `test` command will run locally using phantomjs (capybara).
+The `test` command will run locally using [phantomjs](http://phantomjs.org/) ([poltergeist](https://github.com/teampoltergeist/poltergeist)).
 
 You can choose to deactivate the browsers you don't wanna use, based on id as well. Example:
 
 	$ shoot deactivate 2
-
-This will deactivate (given your output is the same as above) chrome 16 on OS X Snow Leopard.
 
 If you want to deactivate all the active browsers at once you can run:
 
@@ -145,9 +141,9 @@ You got the idea.
 	shoot update                          # Update browser list (WARNING: will override active browsers)
 	shoot version, --version, -v          # Shoot version
 
-### Using ngrok
+### Using [ngrok](https://ngrok.com/)
 
-In order to access your local development environment on BrowserStack you need to forward it somehow to the external work (a.k.a. the internet). BrowserStack has it's own forwarded, but ngrok is better. If you wanna use it:
+In order to access your local development environment on [BrowserStack](https://www.browserstack.com/) you need to forward it somehow to the external world (a.k.a. the internet). [BrowserStack](https://www.browserstack.com/) has it's own forwarder, but [ngrok](https://ngrok.com/) is better. If you wanna use it:
 
 1. Install it from [https://ngrok.com/download](https://ngrok.com/download)
 
@@ -162,11 +158,11 @@ In order to access your local development environment on BrowserStack you need t
   end
 ```
 
-Where `12345` is the port of your local server. The default is `3000`, since I believe you're probably using Rails.
+Where `12345` is the port of your local server. The default is `3000`, since I believe you're probably using [Rails](http://rubyonrails.org/).
 
-#### What if I'm using pow?
+#### What if I'm using [pow](http://pow.cx)?
 
-If you're using pow, skip step 3 above and do it like this instead:
+If you're using [pow](http://pow.cx), skip step 3 above and do it like this instead:
 
 ``` ruby
   def my_test
@@ -175,7 +171,7 @@ If you're using pow, skip step 3 above and do it like this instead:
   end
 ```
 
-NgrokPow will create another symlink of your server folder with a unique name and forward it correctly to ngrok. This symlink will be properly removed at the end of the execution of shoot.
+NgrokPow will create another symlink of your server folder with a unique name and forward it correctly to [ngrok](https://ngrok.com/). This symlink will be properly removed at the end of the execution of shoot.
 
 ## Contributing
 
