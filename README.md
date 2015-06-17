@@ -87,7 +87,7 @@ end
 ```
 
 
-If you wanna just test your scenarios, without paying SauceLabs and wasting time with remote connections:
+If you wanna just test your scenarios, without paying BrowserStack and wasting time with remote connections:
 
 	$ shoot test my_scenario.rb
 	
