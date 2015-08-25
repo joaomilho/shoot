@@ -153,7 +153,7 @@ In order to access your local development environment on [BrowserStack](https://
 
 ``` ruby
   def my_test
-    my_server = Shoot::Ngrok(12345)
+    my_server = Shoot::Ngrok.new(12345)
     visit my_server.url
   end
 ```
@@ -166,7 +166,7 @@ If you're using [pow](http://pow.cx), skip step 3 above and do it like this inst
 
 ``` ruby
   def my_test
-    my_server = Shoot::NgrokPow(:my_server_folder)
+    my_server = Shoot::NgrokPow.new(:my_server_folder)
     visit my_server.url
   end
 ```
