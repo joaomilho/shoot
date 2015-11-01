@@ -3,11 +3,16 @@ require 'capybara'
 require 'timeout'
 
 class Shoot::Scenario
-  URL = sprintf 'http://%s:%s@hub.browserstack.com/wd/hub',
-                ENV['BROWSERSTACK_USER'],
-                ENV['BROWSERSTACK_KEY']
 
   include Capybara::DSL
+
+  def self.url
+    raise "I guess you forgot your browserstack credetials. Take a look at the docs." unless ENV['BROWSERSTACK_USER'] and ENV['BROWSERSTACK_KEY']
+
+    @@url ||= sprintf 'http://%s:%s@hub.browserstack.com/wd/hub',
+      ENV['BROWSERSTACK_USER'],
+      ENV['BROWSERSTACK_KEY']
+  end
 
   def initialize(platform=nil)
     if platform
@@ -17,27 +22,26 @@ class Shoot::Scenario
       Capybara.register_driver platform_name do |app|
         Capybara::Selenium::Driver.new(app,
                                        browser: :remote,
-                                       url: URL,
+                                       url: Shoot::Scenario.url,
                                        desired_capabilities: @capabilities)
         end
     else
       require 'capybara/poltergeist'
+
+      options = {
+         :js_errors => false,
+         :phantomjs_options => ["--web-security=false"]
+      }
+
+      Capybara.register_driver :poltergeist do |app|
+        Capybara::Poltergeist::Driver.new(app, options)
+      end
 
       Capybara.run_server = false
       @platform_name = :poltergeist
     end
     Capybara.default_wait_time = 10
     Capybara.current_driver = platform_name
-  end
-
-  def find *args
-    Timeout.timeout(10) do
-      begin
-        super *args
-      rescue
-        retry
-      end
-    end
   end
 
   def run(method)
@@ -68,6 +72,22 @@ class Shoot::Scenario
                        end
   end
 
+  protected
+
+  # In Selenium the enter key is :return
+  # and on poltergeits it is :Enter
+  def enter_key
+    remote? ? :return : :Enter
+  end
+
+  def remote?
+    @platform_name != :poltergeist
+  end
+
+  def send_enter(selector)
+    find(selector).native.send_key(enter_key)
+  end
+
   private
 
   def directory
@@ -80,7 +100,7 @@ class Shoot::Scenario
   end
 
   def shoot(label)
-    save_screenshot("#{directory}/#{label}.png")
+    save_screenshot("#{directory}/#{label}.png", full: true)
   rescue => e
     File.write("#{directory}/#{label}.error.txt", %(#{e.inspect}\n\n#{e.backtrace.join("\n")}))
   end
