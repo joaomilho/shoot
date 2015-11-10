@@ -9,40 +9,10 @@ module Shoot
     require 'fileutils'
     FileUtils::mkdir_p '.screenshots'
     map %w[--version -v] => :version
-    map %w[--interactive -i] => :interactive
 
     desc 'version, --version, -v', 'Shoot version'
     def version
       puts Shoot::VERSION
-    end
-
-
-    desc 'interactive, --interactive, -i', 'Interactive mode'
-    def interactive
-      interactive_commands = {
-        active:         ->(_)     { active },
-        activate:       ->(params){ activate(*params.split(" ")) },
-        deactivate:     ->(params){ deactivate(*params.split(" ")) },
-        deactivate_all: ->(_)     { deactivate_all },
-        list:           ->(params){ list(params) },
-        open:           ->(_)     { open },
-        test:           ->(params){ test(params) },
-        scenario:       ->(params){ scenario(params) },
-        update:         ->(_)     { update },
-        exit:           ->(_)     { @exit = true }
-      }
-
-      @exit = false
-      while ! @exit
-        choose do |menu|
-          menu.layout = :menu_only
-          menu.shell  = true
-
-          interactive_commands.each do |command_name, command_action|
-            menu.choice(command_name, desc(command_name)){|_, details| command_action.call(details) }
-          end
-        end
-      end
     end
 
     desc 'open', 'Opens all screenshots taken'
