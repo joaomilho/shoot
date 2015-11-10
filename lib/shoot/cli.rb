@@ -30,12 +30,13 @@ module Shoot
       table Browser.active
     end
 
-    desc 'scenario PATH', 'Runs the given scenario or all files in a directory on all active platforms'
-    def scenario(path)
+    desc 'scenario PATH', 'Runs the given scenario or all files in a directory on all active or specified platforms'
+    def scenario(path, *browser_ids)
       scenarios = File.directory?(path) ? Dir.glob("#{path}/*.rb") : [path]
 
+      browsers = browser_ids.empty? ? Browser.active : Browser.select_by_ids(browser_ids)
       elapsed_time do
-        Browser.active.each do |browser|
+        browsers.each do |browser|
           scenarios.each do |scenario|
             run scenario, browser
           end
