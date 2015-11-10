@@ -1,3 +1,9 @@
+# 3.0.0
+
+- Allows scenarios to be run with specific browsers
+- Removes interactive mode
+- Adds some important capabilities for very specific browsers
+
 # 2.1.0
 
 - Adds Ngrok and NgrokPow class to make forwarding much easier;

@@ -1,0 +1,3 @@
+- Allow to define the path for the browsers file
+- Have some sort of built in support for AppliTools
+- Improve performance
