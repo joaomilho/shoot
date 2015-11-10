@@ -117,6 +117,7 @@ class Shoot::Scenario
     @capabilities[:platform] = @platform.os
     @capabilities[:device] = @platform.device if @platform.device
     @capabilities[:emulator] = @platform.emulator
+    @capabilities[:rotatable] = true
   end
 
 end
