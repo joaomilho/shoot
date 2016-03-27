@@ -1,3 +1,6 @@
+# 4.0.0 [Talya.Stern]
+- Supports ngrok 2.X (support for ngrok 1.X removed)
+
 # 3.0.0
 
 - Allows scenarios to be run with specific browsers

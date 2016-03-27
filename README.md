@@ -160,6 +160,11 @@ In order to access your local development environment on [BrowserStack](https://
 
 Where `12345` is the port of your local server. The default is `3000`, since I believe you're probably using [Rails](http://rubyonrails.org/).
 
+You can also provide an authtoken for the ngrok tunnel:
+
+    Shoot::Ngrok.new(auth_token: <your_ngrok_auth_token>)
+
+
 #### What if I'm using [pow](http://pow.cx)?
 
 If you're using [pow](http://pow.cx), skip step 3 above and do it like this instead:

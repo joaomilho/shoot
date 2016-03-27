@@ -7,13 +7,12 @@ module Shoot
     extend Forwardable
     def_delegators :@process, :start, :stop, :exited?
 
-    def initialize(port = 3000)
-      @process = ChildProcess.build("ngrok", "-log=stdout", "-subdomain=#{subdomain}", port.to_s)
-      start
-    end
+    def initialize(port = 3000, auth_token: nil)
+      params = ["ngrok", "http", port.to_s, "-log=stdout", "-subdomain=#{subdomain}"]
+      params << "-authtoken=#{auth_token}" if auth_token
+      @process = ChildProcess.build(*params)
 
-    def stop
-      @process.stop if @process
+      start
     end
 
     def subdomain
@@ -21,7 +20,7 @@ module Shoot
     end
 
     def url
-      @url ||= "http://#{subdomain}.ngrok.com"
+      @url ||= "http://#{subdomain}.ngrok.io"
     end
   end
 end
