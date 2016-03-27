@@ -12,6 +12,10 @@ module Shoot
       start
     end
 
+    def stop
+      @process.stop if @process
+    end
+
     def subdomain
       @subdomain ||= "shoot-#{Time.now.to_i}-#{SecureRandom.random_number(10**8)}"
     end
