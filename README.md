@@ -1,5 +1,6 @@
 ![](https://img.shields.io/gem/v/shoot.svg)
 ![](https://img.shields.io/codeclimate/github/joaomilho/shoot.svg)
+[![Build Status](https://travis-ci.org/joaomilho/shoot.svg?branch=master)](https://travis-ci.org/joaomilho/shoot)
 
 # Shoot
 
