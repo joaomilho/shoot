@@ -1,5 +1,6 @@
 # 4.0.0 [Talya.Stern]
 - Supports ngrok 2.X (support for ngrok 1.X removed)
+- Shoot::Ngrok initializer changed to accept named parameters.
 
 # 3.0.0
 

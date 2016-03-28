@@ -7,9 +7,10 @@ module Shoot
     extend Forwardable
     def_delegators :@process, :start, :stop, :exited?
 
-    def initialize(port = 3000, auth_token: nil)
+    def initialize(options)
+      port = options[:port] || 3000
       params = ["ngrok", "http", port.to_s, "-log=stdout", "-subdomain=#{subdomain}"]
-      params << "-authtoken=#{auth_token}" if auth_token
+      params << "-authtoken=#{options[:auth_token]}" if options[:auth_token]
       @process = ChildProcess.build(*params)
 
       start
