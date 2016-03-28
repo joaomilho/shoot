@@ -1,5 +1,5 @@
 require 'selenium-webdriver'
-require 'capybara'
+require 'capybara/dsl'
 require 'timeout'
 
 class Shoot::Scenario
@@ -40,7 +40,7 @@ class Shoot::Scenario
       Capybara.run_server = false
       @platform_name = :poltergeist
     end
-    Capybara.default_wait_time = 10
+    Capybara.default_max_wait_time = 10
     Capybara.current_driver = platform_name
   end
 
