@@ -165,6 +165,7 @@ In order to access your local development environment on [BrowserStack](https://
 
 * `auth_token`: an authtoken for the ngrok tunnel. Optional.
 
+* `subdomain`: a subdomain of your choosing. Optional.
 
 #### What if I'm using [pow](http://pow.cx)?
 

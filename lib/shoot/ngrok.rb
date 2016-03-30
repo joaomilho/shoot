@@ -9,20 +9,20 @@ module Shoot
 
     def initialize(options)
       port = options[:port] || 3000
-      subdomain_prefix = options[:subdomain_prefix]
-      params = ["ngrok", "http", port.to_s, "-log=stdout", "-subdomain=#{subdomain(subdomain_prefix)}"]
+      @subdomain = options[:subdomain] || generate_subdomain
+      params = ["ngrok", "http", port.to_s, "-log=stdout", "-subdomain=#{@subdomain}"]
       params << "-authtoken=#{options[:auth_token]}" if options[:auth_token]
       @process = ChildProcess.build(*params)
 
       start
     end
 
-    def subdomain(prefix)
-      @subdomain ||= "shoot-#{prefix}-#{Time.now.to_i}-#{SecureRandom.random_number(10**8)}"
+    def generate_subdomain
+      "shoot-#{Time.now.to_i}-#{SecureRandom.random_number(10**8)}"
     end
 
     def url
-      @url ||= "http://#{subdomain}.ngrok.io"
+      @url ||= "http://#{@subdomain}.ngrok.io"
     end
   end
 end
